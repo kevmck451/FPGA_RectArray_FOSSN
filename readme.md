@@ -199,18 +199,18 @@ nix build .#nixosConfigurations.de10-nano -L
 lsblk 
 ```
    - the name that corresponds with the mount point / SD card name
-   - mine is 'mmcblk1'
+   - mine is 'sdb'
 
 3. Unmount the SD card (if it's mounted)
    - it wont hurt to do this if you're not sure
 ```zsh
-sudo umount /dev/mmcblk1
+sudo umount /dev/sdb
 ```
 4. Decompress and Write Image
    - *Warning:* incorrect use of ```dd``` commands could destroy your computer's internal disk, so use with care
 
 ```zsh
-zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/mmcblk1 bs=4M status=progress conv=fsync
+zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
 ```
 - if you eject the sd card when it's done and reinsert it, it should say NixOS as the sd card name
 

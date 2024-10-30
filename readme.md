@@ -163,10 +163,10 @@ sudo nano /etc/fstab
 ### 2.1: Build SD Card Image for DE10
 - This repo contains an already made NixOS system for the DE10
 ```zsh
-git clone https://github.com/kevmck451/phase_array_fossn.git 
+git clone https://github.com/kevmck451/FPGA_LineArray.git
 ```
 ```zsh
-cd phase_array_fossn/FPGA
+cd FPGA_LineArray
 ```
 - this only needs to be done once
 - then updates can be run from the device itself with ```nix rebuild``` command

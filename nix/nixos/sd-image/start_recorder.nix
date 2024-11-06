@@ -14,7 +14,7 @@
 
       serviceConfig = {
           Environment = "PYTHONUNBUFFERED=1";
-          ExecStart = "${pkgs.design.application}/bin/wavdump -r -g 1";
+          ExecStart = "${pkgs.design.application}/bin/recorder";
           User = "root";
           Group = "root";
       };

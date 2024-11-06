@@ -4,7 +4,7 @@
   imports = [
     (modulesPath + "/profiles/minimal.nix")
     (modulesPath + "/installer/sd-card/sd-image.nix")
-#    ./start_recorder.nix
+    ./start_recorder.nix
   ];
 
   boot.loader.generic-extlinux-compatible.enable = true;

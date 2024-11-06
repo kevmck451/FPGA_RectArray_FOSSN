@@ -348,6 +348,11 @@ nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake 
 nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake .#de10-nano switch -L 
 ```
 
+- if using systemd: command to check on scripts running
+```zsh
+journalctl -fu start-mic-recorder
+```
+
 
 
 

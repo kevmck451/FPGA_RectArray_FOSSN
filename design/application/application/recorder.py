@@ -1,5 +1,6 @@
 # program to run in systemd
 
+
 import time
 import wave
 import argparse
@@ -83,7 +84,11 @@ def recorder():
         # Start the Loop Over
 
 
+def test():
+    print('Recorder Should be Running!')
+    print('YAY!!!')
 
 
 if __name__ == "__main__":
-    recorder()
+    # recorder()
+    test()

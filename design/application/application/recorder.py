@@ -8,67 +8,82 @@ import numpy as np
 
 from .hw import HW
 
-def capture(hw, wav, channels):
-    # swap buffers at the beginning since the current one probably overflowed
-    hw.swap_buffers()
-
-    print("capture is starting!")
-    while True:
-        try:
-            data = hw.get_data()
-        except ValueError:
-            print("oops, probably overflowed")
-            continue
-
-        print(f"got {len(data)} samples")
-        wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
-        time.sleep(0.1)
-
 def parse_args():
     parser = argparse.ArgumentParser(prog="recorder",
         description="run recorder program for MUAS mic line array")
-    parser.add_argument('filename', type=str,
-        help="File to save .wav data to.")
-    parser.add_argument('-c', '--channels', type=int, metavar="N", default=None,
-        help="Number of channels to capture (from first N mics/channels), "
-             "default all available.")
-    parser.add_argument('-g', '--gain', type=int, default=1,
-        help="Gain value to multiply microphone data by, default 1.")
-    parser.add_argument('-f', '--fake', action="store_true",
-        help="Capture from fake microphones instead of real ones.")
-    parser.add_argument('-r', '--raw', action="store_true",
-        help="Store raw mic data instead of convolved output channels.")
-
-    return parser.parse_args()
 
 def recorder():
-    args = parse_args()
 
     hw = HW()
-    print(f"capture frequency is {hw.mic_freq_hz}Hz")
+    hw.set_use_fake_mics(False)
+    hw.set_store_raw_data(True)
+    channels = 12
 
-    hw.set_gain(args.gain)
-    hw.set_use_fake_mics(args.fake)
-    hw.set_store_raw_data(args.raw)
+    while True:
 
-    channels = args.channels
-    max_channels = hw.num_mics if args.raw else hw.num_chans
-    if channels is None:
-        channels = max_channels
-    if channels < 1 or channels > max_channels:
-        raise ValueError(f"must be 1 <= channels <= {max_channels}")
+        # Initiate LED Idle Sequence
 
-    wav = wave.open(args.filename, "wb")
-    wav.setnchannels(channels)
-    wav.setsampwidth(2)
-    wav.setframerate(hw.mic_freq_hz)
 
-    try:
-        capture(hw, wav, channels)
-    except KeyboardInterrupt:
-        print("bye")
-    finally:
+
+        # Check Button State and Wait for Press
+
+
+        # Get gain value from switches
+        gain = 1
+        hw.set_gain(gain)
+
+
+        # Filename Logic
+        # chunk_num = 0
+        # if file is none: filename = 0_0.wav
+        # else: filename = f'{int(file.name.split()[0]) + 1}_{chunk_num}.wav'
+
+
+        filename = ''
+        wav = wave.open(filename, "wb")
+        wav.setnchannels(channels)
+        wav.setsampwidth(2)
+        wav.setframerate(hw.mic_freq_hz)
+
+        # create a metadata file with info about recording
+
+
+        # monitor file size
+        filesize = 0
+
+
+        # swap buffers at the beginning since the current one probably overflowed
+        hw.swap_buffers()
+
+        print("capture is starting!")
+        while True:
+            try:
+                data = hw.get_data()
+
+            # record any errors to an error log file
+            except ValueError:
+                print("oops, probably overflowed")
+                continue
+
+            print(f"got {len(data)} samples")
+            wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
+
+            # Initial LED Recording Sequence
+
+            time.sleep(0.1)
+
+
+        # End Recording
+
         wav.close()
+
+
+        # LED Flashing Action for Confirmation
+
+        # Start the Loop Over
+
+
+
 
 if __name__ == "__main__":
     recorder()

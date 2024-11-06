@@ -24,7 +24,7 @@
   
 ### Updating I/O Ports for FOSSN
 - DE1-Nano user manual page 28 of 118
-- we are using DE10-nano shield A from Circuit Boards
+- we are using DE10-nano shield A from Circuit Boards (FOSSN Project)
 - which goes on GPIO 0 pins
 
 ### Antenna Mic Order / Data lines

@@ -21,6 +21,9 @@ def recorder():
     hw.set_store_raw_data(True)
     channels = 12
     IDLE = True
+    RECORD = True
+    file_index = 0
+    chunk_num = 0
 
     while True:
 
@@ -28,13 +31,13 @@ def recorder():
         print('-' * 20)
         print('idle...')
         # Initiate LED Idle Sequence
-        record_counter = 0
+        button_counter = 0
         while IDLE:
 
             # Check Button State / Wait for Press
             if hw.get_button_state():
-                record_counter += 1
-                if record_counter == 5:
+                button_counter += 1
+                if button_counter == 5:
                     IDLE = False
 
             time.sleep(0.1)
@@ -44,60 +47,68 @@ def recorder():
         print('recording setup initiated...')
 
         # Get gain value from switches
-        print(f'-------- Gain Value: {hw.get_gain()}')
+        print(f'---- Gain Value: {hw.get_gain()}')
         hw.set_gain(hw.get_gain())
 
-        time.sleep(1)
         # Filename Logic
-        # chunk_num = 0
+
         # if file is none: filename = 0_0.wav
         # else: filename = f'{int(file.name.split()[0]) + 1}_{chunk_num}.wav'
 
+        filename = f'{file_index}_{chunk_num}.wav'
+        print(f'---- File Name: {filename}')
 
-        # filename = ''
-        # wav = wave.open(filename, "wb")
-        # wav.setnchannels(channels)
-        # wav.setsampwidth(2)
-        # wav.setframerate(hw.mic_freq_hz)
-        #
-        # # create a metadata file with info about recording
-        #
-        #
-        # # monitor file size
+        wav = wave.open(filename, "wb")
+        wav.setnchannels(channels)
+        wav.setsampwidth(2)
+        wav.setframerate(hw.mic_freq_hz)
+
+        # create a metadata file with info about recording
+
+
+        # monitor file size
         # filesize = 0
-        #
-        #
-        # # swap buffers at the beginning since the current one probably overflowed
-        # hw.swap_buffers()
-        #
-        # print("capture is starting!")
-        # while True:
-        #     try:
-        #         data = hw.get_data()
-        #
-        #     # record any errors to an error log file
-        #     except ValueError:
-        #         print("oops, probably overflowed")
-        #         continue
-        #
-        #     print(f"got {len(data)} samples")
-        #     wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
-        #
-        #     # Initial LED Recording Sequence
-        #
-        #     time.sleep(0.1)
-        #
-        #
-        # # End Recording
-        #
-        # wav.close()
+
+
+        # swap buffers at the beginning since the current one probably overflowed
+        hw.swap_buffers()
+
+        print("---- Data Capturing")
+        button_counter = 0
+        while RECORD:
+            try:
+                data = hw.get_data()
+
+            # record any errors to an error log file
+            except ValueError:
+                print("oops, probably overflowed")
+                continue
+
+            print(f"got {len(data)} samples")
+            wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
+
+            # Initial LED Recording Sequence
+
+            # Check Button State / Wait for Press
+            if hw.get_button_state():
+                button_counter += 1
+                if button_counter == 5:
+                    RECORD = False
+
+            time.sleep(0.1)
+
+
+        # End Recording
+
+        wav.close()
 
 
         # LED Flashing Action for Confirmation
 
         # Start the Loop Over
+        file_index += 1
         IDLE = True
-        time.sleep(0.01)
+        RECORD = True
 
 
 

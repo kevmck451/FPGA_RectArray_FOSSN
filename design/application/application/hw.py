@@ -123,6 +123,14 @@ class HW:
 
         return gain_values[switch_value]
 
+    def LED_idle(self):
+        pass
+
+    def LED_recording(self):
+        pass
+
+    def LED_rec_success(self):
+        pass
 
     def close(self):
         if self._closed:
@@ -142,26 +150,6 @@ class HW:
         self._reg_fd = None
 
         self._closed = True
-
-    def test(self):
-        p1 = self.r[11]
-        self.button_state = p1 & 0x1
-        self.switch_states = (p1 >> 1) & 0xF
-
-        while True:
-
-            p1 = self.r[11]
-            current_button_state = p1 & 0x1
-            current_switch_states = (p1 >> 1) & 0xF
-
-            if self.button_state != current_button_state:
-                print(f'Button State Changed : {current_button_state}')
-
-            if self.switch_states != current_switch_states:
-                print(f'Switch State Changed: {current_switch_states}')
-
-            time.sleep(0.1)
-
 
     def __del__(self):
         if not self._closed:

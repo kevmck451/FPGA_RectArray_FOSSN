@@ -96,6 +96,7 @@ def recorder():
         # LED Flashing Action for Confirmation
 
         # Start the Loop Over
+        IDLE = True
         time.sleep(0.01)
 
 

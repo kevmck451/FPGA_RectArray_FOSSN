@@ -129,8 +129,11 @@ class HW:
             p1 = self.r[11]
             self.button_state = p1 & 0x1
             self.switch_states = (p1 >> 1) & 0xF
-            self.r[11] = (p1 >> 5) & 0
 
+            print(f'Button State: {self.button_state}')
+            print(f'Switch State: {self.switch_states}')
+
+            self.r[11] = (p1 >> 5) & 0
             time.sleep(0.1)
             self.r[11] = (p1 >> 5) & 0xFF
             time.sleep(0.1)

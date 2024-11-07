@@ -103,6 +103,26 @@ class HW:
             time.sleep((1/self.mic_freq_hz) * (self.num_taps + 10))
             self.swap_buffers()
 
+    def get_button_state(self):
+        p1 = self.r[11]
+        button_value = p1 & 0x1
+
+        if button_value == 1: button_state = True
+        else: button_state = False
+
+        return button_state
+
+    def get_gain(self):
+        p1 = self.r[11]
+        self.switch_states = (p1 >> 1) & 0xF
+
+        gain_values = [1, 3, 6, 9,
+                       12, 15, 18, 21,
+                       24, 27, 30, 33,
+                       36, 39, 42, 45]
+
+
+
     def close(self):
         if self._closed:
             raise ValueError
@@ -134,10 +154,10 @@ class HW:
             current_switch_states = (p1 >> 1) & 0xF
 
             if self.button_state != current_button_state:
-                print(f'Button State Changed : {self.button_state}')
+                print(f'Button State Changed : {current_button_state}')
 
             if self.switch_states != current_switch_states:
-                print(f'Switch State Changed: {self.switch_states}')
+                print(f'Switch State Changed: {current_switch_states}')
 
             time.sleep(0.1)
 

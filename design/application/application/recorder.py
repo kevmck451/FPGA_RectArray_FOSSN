@@ -22,7 +22,10 @@ def recorder():
     channels = 12
     IDLE = True
 
-    hw.test()
+    while True:
+        print(f'BUTTON: {hw.get_button_state()}')
+        print(f'GAIN: {hw.get_gain()}')
+        time.sleep(0.2)
 
     # while True:
 

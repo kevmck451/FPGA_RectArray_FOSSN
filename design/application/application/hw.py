@@ -124,7 +124,8 @@ class HW:
 
     def test(self):
         while True:
-            print(f'r11 bool: {bool(self.r[11])}')
+            byte_representation = self.r[11].to_bytes((self.r[11].bit_length() + 7) // 8, byteorder='big')
+            print(f'r11 bool: {byte_representation}')
             time.sleep(0.1)
 
     def __del__(self):

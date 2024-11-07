@@ -128,7 +128,7 @@ class HW:
             # print(f'r11 byte: {byte_representation}')
             p1 = self.r[11]
             self.button_state = p1 & 0x1
-            self.switch_states = (p1 >> 1) & 0xF
+            self.switch_states = ~(p1 >> 1) & 0xF
 
             print(f'Button State: {self.button_state}')
             print(f'Switch State: {self.switch_states}')

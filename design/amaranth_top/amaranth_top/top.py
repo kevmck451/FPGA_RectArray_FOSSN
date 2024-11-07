@@ -15,29 +15,12 @@ from .audio_mic import MicCapture, MicCaptureRegs
 from .audio_convolve import Convolver
 from .audio_stream import SampleStreamFIFO, SampleWriter
 
-class Blinker(Component):
-    button_raw: In(1)
-    blink: Out(1)
-
-    def elaborate(self, platform):
-        m = Module()
-
-        button_sync = Signal() # active high
-        m.submodules += FFSynchronizer(self.button_raw, button_sync)
-
-        MAX_COUNT = int(25e6)
-        counter = Signal(range(0, MAX_COUNT-1))
-        with m.If(counter == MAX_COUNT-1):
-            m.d.sync += counter.eq(0)
-            # blink unless button is pressed
-            m.d.sync += self.blink.eq(~self.blink & ~button_sync)
-        with m.Else():
-            m.d.sync += counter.eq(counter + 1)
-
-        return m
 
 class SystemRegs(Component):
     csr_bus: In(csr.Signature(addr_width=2, data_width=32))
+    switches_raw: In(4)
+    button_raw: In(1)
+    leds: Out(8)
 
     store_raw_data: Out(1)
 
@@ -54,10 +37,16 @@ class SystemRegs(Component):
         # nowhere near clean
         store_raw_data: Field(csr.action.RW, 1)
 
+    class ButtonSwitch(csr.Register, access="rw"):
+        button_state: Field(csr.action.R, 1)
+        switches_state: Field(csr.action.R, 4)
+        leds: Field(csr.action.RW, 8)
+
     def __init__(self):
         self._sys_params_1 = self.SysParams1()
         self._sys_params_2 = self.SysParams2()
         self._raw_data_ctrl = self.RawDataCtrl()
+        self._button_switch = self.ButtonSwitch()
 
         csr_sig = self.__annotations__["csr_bus"].signature
         builder = csr.Builder(
@@ -65,6 +54,7 @@ class SystemRegs(Component):
         builder.add("sys_params_1", self._sys_params_1)
         builder.add("sys_params_2", self._sys_params_2)
         builder.add("raw_data_ctrl", self._raw_data_ctrl)
+        builder.add("button_switch", self._button_switch)
 
         self._csr_bridge = csr.Bridge(builder.as_memory_map())
 
@@ -87,6 +77,10 @@ class SystemRegs(Component):
             self._sys_params_2.f.mic_freq_hz.r_data.eq(MIC_FREQ_HZ),
         ]
 
+        m.submodules += FFSynchronizer(self.switches_raw, self._button_switch.f.switches_state.r_data)
+        m.submodules += FFSynchronizer(self.button_raw, self._button_switch.f.button_state.r_data)
+
+
         # forward register values
         m.d.sync += [
             self.store_raw_data.eq(self._raw_data_ctrl.f.store_raw_data.data)
@@ -96,9 +90,8 @@ class SystemRegs(Component):
 
 class Top(Component):
     button_raw: In(1)
-    blink: Out(1)
-
-    status_leds: Out(3)
+    switches_raw: In(4)
+    status_leds: Out(8)
 
     audio_ram: Out(AudioRAMBus())
     csr_bus: In(csr.Signature(addr_width=8, data_width=32))
@@ -129,11 +122,6 @@ class Top(Component):
     def elaborate(self, platform):
         m = Module()
 
-        m.submodules.blinker = blinker = Blinker()
-        m.d.comb += [
-            blinker.button_raw.eq(self.button_raw),
-            self.blink.eq(blinker.blink),
-        ]
 
         # decode busses for all the subordinate components
         m.submodules.csr_decoder = self._csr_decoder
@@ -141,6 +129,11 @@ class Top(Component):
 
         # hook up system registers
         m.submodules.system_regs = system_regs = self._system_regs
+        m.d.comb += [
+            system_regs.switches_raw.eq(self.switches_raw),
+            system_regs.button_raw.eq(self.button_raw),
+            self.status_leds.eq(system_regs.leds)
+        ]
 
         # instantiate mic capture unit in its domain
         m.submodules.mic_capture = mic_capture = \

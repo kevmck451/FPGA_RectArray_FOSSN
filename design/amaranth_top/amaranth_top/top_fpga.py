@@ -78,9 +78,9 @@ class FPGATop(Elaboratable):
 
         # set up basic resources
         clk50 = platform.request("clk50", 0).i
-        blink = platform.request("led", 0).o
-        status = Cat([platform.request("led", n+1).o for n in range(3)])
-        button = platform.request("button", 0).i
+        status = Cat([platform.request("led", n).o for n in range(8)])
+        button = platform.request("button", 1).i
+        switches = Cat([platform.request("switch", n).i for n in range(4)])
 
         # add each GPIO as its own resource
         def add_resources():
@@ -192,8 +192,8 @@ class FPGATop(Elaboratable):
         m.submodules.top = top = Top()
         m.d.comb += [
             top.button_raw.eq(button),
-            blink.eq(top.blink),
             status.eq(top.status_leds),
+            top.switches_raw.eq(switches)
         ]
 
         # wire up microphone data bus

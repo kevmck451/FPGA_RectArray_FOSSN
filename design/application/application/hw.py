@@ -122,6 +122,11 @@ class HW:
 
         self._closed = True
 
+    def test(self):
+        while True:
+            print(self.r[11])
+            time.sleep(0.5)
+
     def __del__(self):
         if not self._closed:
             self.close()

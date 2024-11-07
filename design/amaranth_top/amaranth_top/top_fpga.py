@@ -192,8 +192,8 @@ class FPGATop(Elaboratable):
         m.submodules.top = top = Top()
         m.d.comb += [
             top.button_raw.eq(button),
+            top.switches_raw.eq(switches),
             status.eq(top.status_leds),
-            top.switches_raw.eq(switches)
         ]
 
         # wire up microphone data bus

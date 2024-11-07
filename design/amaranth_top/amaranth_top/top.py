@@ -75,7 +75,6 @@ class SystemRegs(Component):
             self._sys_params_1.f.num_chans.r_data.eq(NUM_CHANS),
             self._sys_params_1.f.num_taps.r_data.eq(NUM_TAPS),
             self._sys_params_2.f.mic_freq_hz.r_data.eq(MIC_FREQ_HZ),
-            self._button_switch.f.leds.r_data.eq(0)
         ]
 
         m.submodules += FFSynchronizer(self.switches_raw, self._button_switch.f.switches_state.r_data)

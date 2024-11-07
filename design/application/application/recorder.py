@@ -20,6 +20,7 @@ def recorder():
     hw.set_use_fake_mics(False)
     hw.set_store_raw_data(True)
     channels = 12
+    button_hold_amount = 10
     IDLE = True
     RECORD = True
     file_index = 0
@@ -37,7 +38,7 @@ def recorder():
             # Check Button State / Wait for Press
             if hw.get_button_state():
                 button_counter += 1
-                if button_counter == 5:
+                if button_counter == button_hold_amount:
                     IDLE = False
 
             time.sleep(0.1)
@@ -45,6 +46,7 @@ def recorder():
         # RECORD STATE
         print('-'*20)
         print('recording setup initiated...')
+        time.sleep(1)
 
         # Get gain value from switches
         print(f'---- Gain Value: {hw.get_gain()}')
@@ -92,7 +94,7 @@ def recorder():
             # Check Button State / Wait for Press
             if hw.get_button_state():
                 button_counter += 1
-                if button_counter == 5:
+                if button_counter == button_hold_amount:
                     RECORD = False
 
             time.sleep(0.1)
@@ -101,6 +103,7 @@ def recorder():
         # End Recording
 
         wav.close()
+        print('---- Recording Successful')
 
 
         # LED Flashing Action for Confirmation
@@ -109,6 +112,7 @@ def recorder():
         file_index += 1
         IDLE = True
         RECORD = True
+        time.sleep(2)
 
 
 

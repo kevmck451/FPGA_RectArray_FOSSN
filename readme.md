@@ -321,12 +321,12 @@ scp -J kevmck@141.225.162.254 nixos@192.168.80.1:/home/nixos/fake_mic_test.wav .
 
 - if using MacBook to control headless Intel Linux PC then ssh into intel linux pc
 ```zsh
-ssh kevmck@141.225.167.131
+ssh kevmck@141.225.167.215
 ```
 - from here you can either do this from the intel linux comp or ssh'd from macbook
 - cd into FPGA folder with nix flake file
 ```zsh
-cd Desktop/phase_array_fossn/FPGA
+cd Desktop/FPGA_LineArray
 ```
 - update the changes that were made to the intel linux pc
 ```zsh
@@ -339,16 +339,12 @@ nix develop --profile profiles/dev
 ```
 - note: if using a dash (nix-develop) nix would expect a default.nix file
   - not using the dash, signifies using a nix.flake file
-- for significant changes, it's best use the boot flag
-```zsh
-nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake .#de10-nano boot -L 
-```
-- otherwise the switch command is fine
+
 ```zsh
 nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake .#de10-nano switch -L 
 ```
 
-- if using systemd: command to check on scripts running
+- command to check on scripts running in systemd
 ```zsh
 journalctl -fu start-mic-recorder
 ```

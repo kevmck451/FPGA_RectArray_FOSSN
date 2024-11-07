@@ -123,20 +123,24 @@ class HW:
         self._closed = True
 
     def test(self):
+        p1 = self.r[11]
+        self.button_state = p1 & 0x1
+        self.switch_states = (p1 >> 1) & 0xF
+
         while True:
-            # byte_representation = self.r[11].to_bytes((self.r[11].bit_length() + 7) // 8, byteorder='big')
-            # print(f'r11 byte: {byte_representation}')
+
             p1 = self.r[11]
-            self.button_state = p1 & 0x1
-            self.switch_states = (p1 >> 1) & 0xF
+            current_button_state = p1 & 0x1
+            current_switch_states = (p1 >> 1) & 0xF
 
-            print(f'Button State: {self.button_state}')
-            print(f'Switch State: {self.switch_states}')
+            if self.button_state != current_button_state:
+                print(f'Button State Changed : {self.button_state}')
 
-            self.r[11] = (p1 >> 5) & 0
+            if self.switch_states != current_switch_states:
+                print(f'Switch State Changed: {self.switch_states}')
+
             time.sleep(0.1)
-            self.r[11] = (p1 >> 5) & 0xFF
-            time.sleep(0.1)
+
 
     def __del__(self):
         if not self._closed:

@@ -130,6 +130,9 @@ class HW:
             self.button_state = p1 & 0x1
             self.switch_states = (p1 >> 1) & 0x4
 
+            print(f'Button State: {self.button_state}')
+            print(f'Switch States: {self.switch_states}')
+
             # Mask for 8 LEDs (bits 6–13)
             led_mask = 0b11111111 << 6  # 8 bits set to 1, starting from bit 6
 

@@ -23,28 +23,31 @@ def recorder():
     IDLE = True
 
     while True:
-        print(f'BUTTON: {hw.get_button_state()}')
-        print(f'GAIN: {hw.get_gain()}')
-        time.sleep(0.2)
-
-    # while True:
 
         # IDLE STATE
-        # while IDLE:
-        #     print('idle...')
-        #     time.sleep(1)
-
-            # Initiate LED Idle Sequence
+        print('-' * 20)
+        print('idle...')
+        # Initiate LED Idle Sequence
+        record_counter = 0
+        while IDLE:
 
             # Check Button State / Wait for Press
+            if hw.get_button_state():
+                record_counter += 1
+                if record_counter == 5:
+                    IDLE = False
 
+            time.sleep(0.1)
 
         # RECORD STATE
+        print('-'*20)
+        print('recording setup initiated...')
+
         # Get gain value from switches
-        # gain = 1
-        # hw.set_gain(gain)
+        print(f'-------- Gain Value: {hw.get_gain()}')
+        hw.set_gain(hw.get_gain())
 
-
+        time.sleep(1)
         # Filename Logic
         # chunk_num = 0
         # if file is none: filename = 0_0.wav
@@ -93,7 +96,7 @@ def recorder():
         # LED Flashing Action for Confirmation
 
         # Start the Loop Over
-
+        time.sleep(0.01)
 
 
 

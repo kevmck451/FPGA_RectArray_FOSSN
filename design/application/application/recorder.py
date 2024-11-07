@@ -29,7 +29,7 @@ def recorder():
     while True:
 
         # IDLE STATE
-        print('-' * 20)
+        print('-' * 30)
         print('idle...')
         # Initiate LED Idle Sequence
         button_counter = 0
@@ -44,9 +44,9 @@ def recorder():
             time.sleep(0.1)
 
         # RECORD STATE
-        print('-'*20)
+        print('-' * 30)
         print('recording setup initiated...')
-        time.sleep(1)
+        time.sleep(2)
 
         # Get gain value from switches
         print(f'---- Gain Value: {hw.get_gain()}')
@@ -56,8 +56,8 @@ def recorder():
 
         # if file is none: filename = 0_0.wav
         # else: filename = f'{int(file.name.split()[0]) + 1}_{chunk_num}.wav'
-
-        filename = f'{file_index}_{chunk_num}.wav'
+        basepath = '/home/nixos'
+        filename = f'{basepath}/{file_index}_{chunk_num}.wav'
         print(f'---- File Name: {filename}')
 
         wav = wave.open(filename, "wb")
@@ -67,15 +67,13 @@ def recorder():
 
         # create a metadata file with info about recording
 
-
         # monitor file size
-        # filesize = 0
-
+        filesize = 0
 
         # swap buffers at the beginning since the current one probably overflowed
         hw.swap_buffers()
 
-        print("---- Data Capturing")
+        print('---- Data Capturing')
         button_counter = 0
         while RECORD:
             try:
@@ -83,10 +81,11 @@ def recorder():
 
             # record any errors to an error log file
             except ValueError:
-                print("oops, probably overflowed")
+                print('---- oops, probably overflowed')
                 continue
 
-            print(f"got {len(data)} samples")
+            print(f'---- Samples: {len(data)}')
+            filesize += (len(data) * channels * 16) / (8 * 1000 * 1000) # Mega Bytes
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
 
             # Initial LED Recording Sequence
@@ -96,6 +95,11 @@ def recorder():
                 button_counter += 1
                 if button_counter == button_hold_amount:
                     RECORD = False
+
+            if filesize >= 4000:
+                # create new recording with incremented chunk number
+                print('---- File Size Limit Reached')
+                pass
 
             time.sleep(0.1)
 

@@ -124,9 +124,7 @@ class HW:
 
     def test(self):
         while True:
-            print(f'r11: {self.r[11]}')
-            print(f'type: {type(self.r[11])}')
-            print(f'Length: {len(self.r[11])}')
+            print(f'r11 bool: {bool(self.r[11])}')
             time.sleep(0.1)
 
     def __del__(self):

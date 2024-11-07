@@ -128,24 +128,11 @@ class HW:
             # print(f'r11 byte: {byte_representation}')
             p1 = self.r[11]
             self.button_state = p1 & 0x1
-            self.switch_states = (p1 >> 1) & 0x4
+            self.switch_states = (p1 >> 1) & 0xF
+            self.r[11] = (p1 >> 5) & 0
 
-            print(f'Button State: {self.button_state}')
-            print(f'Switch States: {self.switch_states}')
-
-            # Mask for 8 LEDs (bits 6–13)
-            led_mask = 0b11111111 << 6  # 8 bits set to 1, starting from bit 6
-
-            # Clear the LED bits (bits 6–13)
-            p1 &= ~led_mask
-
-            # Set the new LED states (new_led_value should be in range 0-255 for 8 bits)
-            new_led_value = 0b10101010  # Example LED pattern
-            p1 |= (new_led_value << 6)
-
-            # Update the 32-bit register with the modified value
-            self.r[11] = p1
-
+            time.sleep(0.1)
+            self.r[11] = (p1 >> 5) & 0xFF
             time.sleep(0.1)
 
     def __del__(self):

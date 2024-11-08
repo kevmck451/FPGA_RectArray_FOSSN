@@ -134,10 +134,9 @@ class HW:
 
     def LED_idle(self):
         self.LED_off()
-        values_list = [0x80, 0x80, 0x40, 0x40, 0x20, 0x20, 0x10,  0x10,
+        values_list = [0x80, 0x80, 0x40, 0x40, 0x20, 0x20, 0x10, 0x10,
                        0x08, 0x08, 0x04, 0x04, 0x02, 0x02, 0x01, 0x01]
         self.r[11] |= (values_list[self.idle_num] << 5)
-        self.previous_idle_num = self.idle_num
         if self.idle_num > self.previous_idle_num:
             self.previous_idle_num = self.idle_num
             self.idle_num += 1

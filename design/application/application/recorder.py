@@ -108,9 +108,10 @@ def recorder():
                 print('---- oops, probably overflowed')
                 continue
 
-            print(f'---- Samples: {len(data)}')
+            # print(f'---- Samples: {len(data)}')
             filesize += (len(data) * channels * 16) / (8 * 1000 * 1000) # Mega Bytes
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
+            print(f'---- File Size: {filesize} MB')
 
             # Check Button State / Wait for Press
             if hw.get_button_state():
@@ -133,7 +134,7 @@ def recorder():
         print('---- Recording Successful')
         # LED Flashing Action for Confirmation
         hw.LED_quick_blink()
-        print(f'File Size: {filesize} MB')
+        print(f'---- File Size: {filesize} MB')
 
 
         # ---------------------------------------------------

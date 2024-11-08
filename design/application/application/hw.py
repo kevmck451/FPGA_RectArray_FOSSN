@@ -123,6 +123,12 @@ class HW:
 
         return gain_values[switch_value]
 
+    def LED_off(self):
+        pass
+
+    def LED_on(self):
+        pass
+
     def LED_idle(self):
         pass
 

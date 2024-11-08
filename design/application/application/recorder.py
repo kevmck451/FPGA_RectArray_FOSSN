@@ -34,7 +34,7 @@ def recorder():
         # Initiate LED Idle Sequence
         button_counter = 0
         while IDLE:
-
+            hw.LED_off()
             # Check Button State / Wait for Press
             if hw.get_button_state():
                 button_counter += 1
@@ -46,6 +46,7 @@ def recorder():
         # RECORD STATE
         print('-' * 30)
         print('recording setup initiated...')
+        hw.LED_on()
         time.sleep(2)
 
         # Get gain value from switches
@@ -116,6 +117,7 @@ def recorder():
         file_index += 1
         IDLE = True
         RECORD = True
+        hw.LED_off()
         time.sleep(2)
 
 

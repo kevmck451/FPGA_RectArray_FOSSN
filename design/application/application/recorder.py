@@ -4,8 +4,8 @@
 import time
 import wave
 import argparse
-
 import numpy as np
+from pathlib import Path
 
 from .hw import HW
 
@@ -14,7 +14,6 @@ def parse_args():
         description="run recorder program for MUAS mic line array")
 
 def recorder():
-    print('Recorder Script is Running')
 
     hw = HW()
     hw.set_use_fake_mics(False)
@@ -25,7 +24,13 @@ def recorder():
     RECORD = True
     file_index = 0
     chunk_num = 0
+    basepath = '/home/nixos'
 
+    # create directory for error logs
+    Path(f'{basepath}/logs').mkdir(exist_ok=True)
+
+    # Recorder Script
+    print('Recorder Script is Running')
     while True:
 
         # IDLE STATE
@@ -34,7 +39,7 @@ def recorder():
         # Initiate LED Idle Sequence
         button_counter = 0
         while IDLE:
-            hw.LED_off()
+            hw.LED_on()
             # Check Button State / Wait for Press
             if hw.get_button_state():
                 button_counter += 1
@@ -46,7 +51,7 @@ def recorder():
         # RECORD STATE
         print('-' * 30)
         print('recording setup initiated...')
-        hw.LED_on()
+        hw.LED_off()
         time.sleep(2)
 
         # Get gain value from switches
@@ -54,10 +59,15 @@ def recorder():
         hw.set_gain(hw.get_gain())
 
         # Filename Logic
+        latest_num = -1
+        for path in Path(basepath).rglob('*.wav'):
+            prefix = int(path.stem.split('_')[0])
+            latest_num = max(latest_num, prefix)
+        if latest_num == -1:
+            file_index = 0
+        else:
+            file_index = latest_num + 1
 
-        # if file is none: filename = 0_0.wav
-        # else: filename = f'{int(file.name.split()[0]) + 1}_{chunk_num}.wav'
-        basepath = '/home/nixos'
         filename = f'{basepath}/{file_index}_{chunk_num}.wav'
         print(f'---- File Name: {filename}')
 
@@ -90,6 +100,7 @@ def recorder():
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
 
             # Initial LED Recording Sequence
+            hw.LED_on()
 
             # Check Button State / Wait for Press
             if hw.get_button_state():

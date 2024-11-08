@@ -19,7 +19,7 @@ def recorder():
     hw.set_use_fake_mics(False)
     hw.set_store_raw_data(True)
     channels = 12
-    button_hold_amount = 10
+    button_hold_amount = 8
     IDLE = True
     RECORD = True
     file_index = 0
@@ -39,25 +39,28 @@ def recorder():
         # Initiate LED Idle Sequence
         button_counter = 0
         while IDLE:
-            hw.LED_on()
+            hw.LED_idle()
             # Check Button State / Wait for Press
             if hw.get_button_state():
+                hw.button_press_indicate(button_counter)
                 button_counter += 1
                 if button_counter == button_hold_amount:
                     IDLE = False
 
             time.sleep(0.1)
 
+        # ---------------------------------------------------
         # RECORD STATE
         print('-' * 30)
         print('recording setup initiated...')
-        hw.LED_off()
+        hw.LED_quick_blink()
         time.sleep(2)
 
         # Get gain value from switches
         print(f'---- Gain Value: {hw.get_gain()}')
         hw.set_gain(hw.get_gain())
 
+        # ---------------------------------------------------
         # Filename Logic
         latest_num = -1
         for path in Path(basepath).rglob('*.wav'):
@@ -71,16 +74,23 @@ def recorder():
         filename = f'{basepath}/{file_index}_{chunk_num}.wav'
         print(f'---- File Name: {filename}')
 
+        # ---------------------------------------------------
+        # create wav file to save
         wav = wave.open(filename, "wb")
         wav.setnchannels(channels)
         wav.setsampwidth(2)
         wav.setframerate(hw.mic_freq_hz)
 
+        # ---------------------------------------------------
         # create a metadata file with info about recording
 
+
+
+
+
+        # ---------------------------------------------------
         # monitor file size
         filesize = 0
-
         # swap buffers at the beginning since the current one probably overflowed
         hw.swap_buffers()
 
@@ -104,6 +114,7 @@ def recorder():
 
             # Check Button State / Wait for Press
             if hw.get_button_state():
+                hw.button_press_indicate(button_counter)
                 button_counter += 1
                 if button_counter == button_hold_amount:
                     RECORD = False
@@ -115,16 +126,18 @@ def recorder():
 
             time.sleep(0.1)
 
-
+        # ---------------------------------------------------
         # End Recording
 
         wav.close()
         print('---- Recording Successful')
-
-
         # LED Flashing Action for Confirmation
+        hw.LED_quick_blink()
 
-        # Start the Loop Over
+
+
+        # ---------------------------------------------------
+        # Reset all Flags to start loop over
         file_index += 1
         IDLE = True
         RECORD = True

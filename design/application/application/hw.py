@@ -126,18 +126,23 @@ class HW:
     def LED_off(self):
         self.r[11] &= ~(0xFF << 5)
 
-
     def LED_on(self):
         self.r[11] |= (0xFF << 5)
 
-
     def LED_idle(self):
+        # led intensity cresc / decresc back and forth
         pass
+
+    def button_press_indicate(self, number):
+        values_list = [0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF]
+        self.r[11] |= (values_list[number] << 5)
 
     def LED_recording(self):
+        # slow blinking
         pass
 
-    def LED_rec_success(self):
+    def LED_quick_blink(self):
+        # quick blink sequence
         pass
 
     def close(self):

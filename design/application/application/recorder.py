@@ -113,10 +113,10 @@ def recorder():
 
             # Check Button State / Wait for Press
             if hw.get_button_state():
-                hw.button_press_indicate(button_counter)
+                hw.button_press_indicate_r(button_counter)
                 button_counter += 1
                 if button_counter == button_hold_amount:
-                    hw.button_press_indicate(button_counter)
+                    hw.button_press_indicate_r(button_counter)
                     RECORD = False
 
             if filesize >= 4000:
@@ -132,7 +132,7 @@ def recorder():
         print('---- Recording Successful')
         # LED Flashing Action for Confirmation
         hw.LED_quick_blink()
-        print(f'---- File Size: {np.round(filesize, 2)} MB')
+        print(f'---- File Size: {filesize:.2f} MB')
 
 
         # ---------------------------------------------------

@@ -178,6 +178,8 @@ class HW:
                     self.rec_blink_state = True
 
             self.rec_blink_value += 1
+            if self.rec_blink_value == 100:
+                self.rec_blink_value = 0
 
     def LED_quick_blink(self):
         num_blinks = 5

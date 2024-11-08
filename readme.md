@@ -296,6 +296,9 @@ sudo wavdump -f -r fake_mic_test.wav
 ```zsh
 scp -J kevmck@141.225.162.254 nixos@192.168.80.1:/home/nixos/fake_mic_test.wav .
 ```
+```zsh
+scp nixos@192.168.80.1:/home/nixos/0_0.wav .
+```
 - from here, changes made to code will need to be rebuilt
 
 ---

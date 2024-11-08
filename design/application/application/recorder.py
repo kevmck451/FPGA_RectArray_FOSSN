@@ -48,6 +48,8 @@ def recorder():
                 if button_counter == button_hold_amount:
                     hw.button_press_indicate(button_counter)
                     IDLE = False
+            else:
+                button_counter = 0
 
             time.sleep(0.1)
 
@@ -56,7 +58,7 @@ def recorder():
         print('-' * 30)
         print('recording setup initiated...')
         hw.LED_quick_blink()
-        time.sleep(2)
+        time.sleep(1)
 
         # Get gain value from switches
         print(f'---- Gain Value: {hw.get_gain()}')
@@ -149,7 +151,7 @@ def recorder():
         IDLE = True
         RECORD = True
         hw.LED_off()
-        time.sleep(2)
+        time.sleep(1)
 
 
 

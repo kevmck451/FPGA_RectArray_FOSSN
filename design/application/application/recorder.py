@@ -84,11 +84,6 @@ def recorder():
         wav.setframerate(hw.mic_freq_hz)
 
         # ---------------------------------------------------
-        # create a metadata file with info about recording
-
-
-
-        # ---------------------------------------------------
         # monitor file size
         filesize = 0
         # swap buffers at the beginning since the current one probably overflowed
@@ -118,6 +113,7 @@ def recorder():
                 if button_counter == button_hold_amount:
                     hw.button_press_indicate_r(button_counter)
                     RECORD = False
+            else: button_counter = 0
 
             if filesize >= 4000:
                 # create new recording with incremented chunk number
@@ -133,6 +129,18 @@ def recorder():
         # LED Flashing Action for Confirmation
         hw.LED_quick_blink()
         print(f'---- File Size: {filesize:.2f} MB')
+
+        # ---------------------------------------------------
+        # create a metadata file with info about recording
+            # File name equal to audio filename
+            # Gain Setting
+            # File Size
+            # Errors
+            # Number of Chunks
+            # Number of Channels
+            # Bit Depth
+            # Sample Rate
+            # Temperature
 
 
         # ---------------------------------------------------

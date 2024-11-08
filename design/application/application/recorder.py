@@ -113,13 +113,9 @@ def recorder():
             filesize += (len(data) * channels * 16) / (8 * 1000 * 1000) # Mega Bytes
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
 
-            if int(np.round(filesize, 0)) % 10 == 0:
-                print(f'---- File Size: {np.round(filesize, 2)} MB')
-
             # Check Button State / Wait for Press
             if hw.get_button_state():
                 hw.button_press_indicate(button_counter)
-                print(f'Button Counter: {button_counter}')
                 button_counter += 1
                 if button_counter == button_hold_amount:
                     hw.button_press_indicate(button_counter)

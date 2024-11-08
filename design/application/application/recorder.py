@@ -88,11 +88,7 @@ def recorder():
 
 
 
-
-
         # ---------------------------------------------------
-        # Initial LED Recording Sequence
-        hw.LED_on()
         # monitor file size
         filesize = 0
         # swap buffers at the beginning since the current one probably overflowed
@@ -101,6 +97,8 @@ def recorder():
         print('---- Data Capturing')
         button_counter = 0
         while RECORD:
+            # Initial LED Recording Sequence
+            hw.LED_recording()
             try:
                 data = hw.get_data()
 

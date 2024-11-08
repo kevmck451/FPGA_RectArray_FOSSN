@@ -83,7 +83,8 @@ class SystemRegs(Component):
 
         # forward register values
         m.d.sync += [
-            self.store_raw_data.eq(self._raw_data_ctrl.f.store_raw_data.data)
+            self.store_raw_data.eq(self._raw_data_ctrl.f.store_raw_data.data),
+            self.leds.eq(self._button_switch.f.leds.data),
         ]
 
         return m
@@ -180,7 +181,6 @@ class Top(Component):
         # writer to save sample data to memory
         m.submodules.sample_writer = sample_writer = self._sample_writer
         connect(m, sample_writer.audio_ram, flipped(self.audio_ram))
-        m.d.comb += self.status_leds.eq(sample_writer.status_leds)
 
         # switch between saving raw sample data and convolved data
         with m.If(system_regs.store_raw_data):

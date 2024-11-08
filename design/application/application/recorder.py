@@ -89,6 +89,8 @@ def recorder():
 
 
         # ---------------------------------------------------
+        # Initial LED Recording Sequence
+        hw.LED_on()
         # monitor file size
         filesize = 0
         # swap buffers at the beginning since the current one probably overflowed
@@ -108,9 +110,6 @@ def recorder():
             print(f'---- Samples: {len(data)}')
             filesize += (len(data) * channels * 16) / (8 * 1000 * 1000) # Mega Bytes
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
-
-            # Initial LED Recording Sequence
-            hw.LED_on()
 
             # Check Button State / Wait for Press
             if hw.get_button_state():

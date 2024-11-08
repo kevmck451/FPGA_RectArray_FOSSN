@@ -142,8 +142,15 @@ class HW:
         pass
 
     def LED_quick_blink(self):
-        # quick blink sequence
-        pass
+        num_blinks = 5
+        delaytime = 0.1
+        self.LED_off()
+        for i in range(num_blinks):
+            self.LED_on()
+            time.sleep(delaytime)
+            self.LED_off()
+            time.sleep(delaytime)
+
 
     def close(self):
         if self._closed:

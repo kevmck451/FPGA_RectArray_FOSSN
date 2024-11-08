@@ -45,6 +45,7 @@ def recorder():
                 hw.button_press_indicate(button_counter)
                 button_counter += 1
                 if button_counter == button_hold_amount:
+                    hw.button_press_indicate(button_counter)
                     IDLE = False
 
             time.sleep(0.1)
@@ -116,6 +117,7 @@ def recorder():
                 hw.button_press_indicate(button_counter)
                 button_counter += 1
                 if button_counter == button_hold_amount:
+                    hw.button_press_indicate(button_counter)
                     RECORD = False
 
             if filesize >= 4000:
@@ -127,12 +129,11 @@ def recorder():
 
         # ---------------------------------------------------
         # End Recording
-
         wav.close()
         print('---- Recording Successful')
         # LED Flashing Action for Confirmation
         hw.LED_quick_blink()
-
+        print(f'File Size: {filesize} MB')
 
 
         # ---------------------------------------------------

@@ -25,6 +25,7 @@ def recorder():
     file_index = 0
     chunk_num = 0
     basepath = '/home/nixos'
+    hw.LED_off()
 
     # create directory for error logs
     Path(f'{basepath}/logs').mkdir(exist_ok=True)
@@ -112,7 +113,7 @@ def recorder():
             filesize += (len(data) * channels * 16) / (8 * 1000 * 1000) # Mega Bytes
             wav.writeframesraw(np.ascontiguousarray(data[:, :channels]))
 
-            if int(filesize) % 10 == 0:
+            if int(np.round(filesize, 0)) % 10 == 0:
                 print(f'---- File Size: {np.round(filesize, 2)} MB')
 
             # Check Button State / Wait for Press
@@ -137,7 +138,7 @@ def recorder():
         print('---- Recording Successful')
         # LED Flashing Action for Confirmation
         hw.LED_quick_blink()
-        print(f'---- File Size: {filesize} MB')
+        print(f'---- File Size: {np.round(filesize, 2)} MB')
 
 
         # ---------------------------------------------------

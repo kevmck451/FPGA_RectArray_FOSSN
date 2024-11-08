@@ -132,6 +132,7 @@ class HW:
         self.r[11] |= (0xFF << 5)
 
     def LED_idle(self):
+        self.LED_off()
         values_list = [0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01]
         self.r[11] |= (values_list[self.idle_num] << 5)
         self.idle_num += 1
@@ -139,6 +140,7 @@ class HW:
             self.idle_num = 0
 
     def button_press_indicate(self, number):
+        self.LED_off()
         values_list = [0x00, 0x80, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC, 0xFE, 0xFF]
         self.r[11] |= (values_list[number] << 5)
 

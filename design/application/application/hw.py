@@ -121,13 +121,8 @@ class HW:
     def get_gain(self):
         p1 = self.r[11]
         switch_value = (p1 >> 1) & 0xF
-
-        gain_values = [1, 3, 6, 9,
-                       12, 15, 18, 21,
-                       24, 27, 30, 33,
-                       36, 39, 42, 45]
-
-        return gain_values[switch_value]
+        multiplier = 3
+        return (switch_value * multiplier) + 1
 
     def LED_off(self):
         self.r[11] &= ~(0xFF << 5)

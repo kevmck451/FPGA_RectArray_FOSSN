@@ -351,7 +351,10 @@ nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake 
 ```zsh
 journalctl -fu start-mic-recorder
 ```
-
+- remove all wav files in current directory
+```zsh
+rm -f *.wav
+```
 
 
 

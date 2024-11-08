@@ -75,12 +75,13 @@ def recorder():
         else:
             file_index = latest_num + 1
 
-        filename = f'{basepath}/{file_index}_{chunk_num}.wav'
+        filename = f'{file_index}_{chunk_num}.wav'
+        filepath = f'{basepath}/{filename}.wav'
         print(f'---- File Name: {filename}')
 
         # ---------------------------------------------------
         # create wav file to save
-        wav = wave.open(filename, "wb")
+        wav = wave.open(filepath, "wb")
         wav.setnchannels(channels)
         wav.setsampwidth(2)
         wav.setframerate(hw.mic_freq_hz)

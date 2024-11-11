@@ -26,9 +26,10 @@ def recorder():
     chunk_num = 0
     basepath = '/home/nixos'
     hw.LED_off()
+    error_occured = False
 
     # create directory for error logs
-    Path(f'{basepath}/logs').mkdir(exist_ok=True)
+    # Path(f'{basepath}/logs').mkdir(exist_ok=True)
 
     # Recorder Script
     print('Recorder Script is Running')
@@ -55,7 +56,6 @@ def recorder():
 
         # ---------------------------------------------------
         # RECORD STATE
-        print('-' * 30)
         print('recording setup initiated...')
         hw.LED_quick_blink()
         time.sleep(1)
@@ -92,7 +92,7 @@ def recorder():
         # swap buffers at the beginning since the current one probably overflowed
         hw.swap_buffers()
 
-        print('---- Data Capturing')
+        print('---- *** RECORDING IN PROGRESS ***')
         button_counter = 0
         while RECORD:
             # Initial LED Recording Sequence
@@ -103,6 +103,7 @@ def recorder():
             # record any errors to an error log file
             except ValueError:
                 print('---- oops, probably overflowed')
+                error_occured = True
                 continue
 
             # print(f'---- Samples: {len(data)}')
@@ -119,7 +120,7 @@ def recorder():
             else: button_counter = 0
 
             if filesize >= 4000:
-                # create new recording with incremented chunk number
+                # todo: create new recording with incremented chunk number
                 print('---- File Size Limit Reached')
                 pass
 
@@ -135,16 +136,21 @@ def recorder():
 
         # ---------------------------------------------------
         # create a metadata file with info about recording
-            # File name equal to audio filename
-            # Gain Setting
-            # File Size
-            # Errors
-            # Number of Chunks
-            # Number of Channels
-            # Bit Depth
-            # Sample Rate
-            # Temperature
+        metadata = {
+            'filename' : f'{filename}.wav',
+            'gain' : f'{hw.get_gain()} / 255',
+            'filesize' : f'{filesize:.2f} MB',
+            'error occured' : error_occured,
+            'number of chunks' : chunk_num,
+            'channels' : channels,
+            'bit depth' : 16,
+            'sample rate' : f'{hw.mic_freq_hz} Hz',
+            'temperature' : 'none',
+            }
 
+        with open(f'{filename}.txt', "w") as file:
+            for label, value in metadata.items():
+                file.write(f"{label}: {value}\n")
 
         # ---------------------------------------------------
         # Reset all Flags to start loop over

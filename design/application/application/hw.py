@@ -185,7 +185,6 @@ class HW:
             self.LED_off()
             time.sleep(delaytime)
 
-
     def close(self):
         if self._closed:
             raise ValueError

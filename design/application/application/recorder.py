@@ -75,7 +75,7 @@ def recorder():
         else:
             file_index = latest_num + 1
 
-        filename = f'{file_index}_{chunk_num}.wav'
+        filename = f'{file_index}_{chunk_num}'
         filepath = f'{basepath}/{filename}.wav'
         print(f'---- File Name: {filename}')
 

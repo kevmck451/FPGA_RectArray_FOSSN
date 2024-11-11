@@ -88,6 +88,7 @@ def recorder():
 
         # ---------------------------------------------------
         # monitor file size
+        total_filesize = 0
         filesize = 0
         # swap buffers at the beginning since the current one probably overflowed
         hw.swap_buffers()
@@ -120,10 +121,18 @@ def recorder():
             else: button_counter = 0
 
             if filesize >= 4000:
-                # todo: create new recording with incremented chunk number
                 print('---- File Size Limit Reached')
-                RECORD = False
-                pass
+                wav.close()
+                chunk_num += 1
+                filename = f'{file_index}_{chunk_num}'
+                filepath = f'{basepath}/{filename}.wav'
+                wav = wave.open(filepath, "wb")
+                wav.setnchannels(channels)
+                wav.setsampwidth(2)
+                wav.setframerate(hw.mic_freq_hz)
+                print(f'---- New Chunk Created: {filename}')
+                total_filesize += filesize
+                filesize = 0
 
             time.sleep(0.1)
 
@@ -137,10 +146,11 @@ def recorder():
 
         # ---------------------------------------------------
         # create a metadata file with info about recording
+        if total_filesize == 0: total_filesize = filesize
         metadata = {
             'filename' : f'{filename}.wav',
             'gain' : f'{hw.get_gain()} / 255',
-            'filesize' : f'{filesize:.2f} MB',
+            'filesize' : f'{total_filesize:.2f} MB',
             'error occured' : error_occured,
             'number of chunks' : chunk_num,
             'channels' : channels,
@@ -156,6 +166,7 @@ def recorder():
         # ---------------------------------------------------
         # Reset all Flags to start loop over
         file_index += 1
+        chunk_num = 0
         IDLE = True
         RECORD = True
         hw.LED_off()

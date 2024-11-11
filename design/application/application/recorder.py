@@ -148,7 +148,7 @@ def recorder():
             'temperature' : 'none',
             }
 
-        with open(f'{filename}.txt', "w") as file:
+        with open(f'{basepath}/{file_index}.txt', "w") as file:
             for label, value in metadata.items():
                 file.write(f"{label}: {value}\n")
 

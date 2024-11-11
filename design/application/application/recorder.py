@@ -122,6 +122,7 @@ def recorder():
             if filesize >= 4000:
                 # todo: create new recording with incremented chunk number
                 print('---- File Size Limit Reached')
+                RECORD = False
                 pass
 
             time.sleep(0.1)

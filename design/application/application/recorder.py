@@ -152,7 +152,7 @@ def recorder():
             'gain' : f'{hw.get_gain()} / 255',
             'filesize' : f'{total_filesize:.2f} MB',
             'error occured' : error_occured,
-            'number of chunks' : chunk_num,
+            'number of chunks' : (chunk_num+1),
             'channels' : channels,
             'bit depth' : 16,
             'sample rate' : f'{hw.mic_freq_hz} Hz',

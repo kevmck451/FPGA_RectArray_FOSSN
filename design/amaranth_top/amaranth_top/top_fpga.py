@@ -80,6 +80,7 @@ class FPGATop(Elaboratable):
         clk50 = platform.request("clk50", 0).i
         status = Cat([platform.request("led", n).o for n in range(8)])
         button = platform.request("button", 1).i
+        button_off = platform.request("button", 0).i
         switches = Cat([platform.request("switch", n).i for n in range(4)])
 
         # add each GPIO as its own resource
@@ -192,6 +193,7 @@ class FPGATop(Elaboratable):
         m.submodules.top = top = Top()
         m.d.comb += [
             top.button_raw.eq(button),
+            top.button_off_raw.eq(button_off),
             top.switches_raw.eq(switches),
             status.eq(top.status_leds),
         ]

@@ -20,6 +20,7 @@ class SystemRegs(Component):
     csr_bus: In(csr.Signature(addr_width=2, data_width=32))
     switches_raw: In(4)
     button_raw: In(1)
+    button_off_raw: In(1)
     leds: Out(8)
 
     store_raw_data: Out(1)
@@ -41,6 +42,7 @@ class SystemRegs(Component):
         button_state: Field(csr.action.R, 1)
         switches_state: Field(csr.action.R, 4)
         leds: Field(csr.action.RW, 8)
+        button_off_state: Field(csr.action.R, 1)
 
     def __init__(self):
         self._sys_params_1 = self.SysParams1()
@@ -79,6 +81,7 @@ class SystemRegs(Component):
 
         m.submodules += FFSynchronizer(self.switches_raw, self._button_switch.f.switches_state.r_data)
         m.submodules += FFSynchronizer(self.button_raw, self._button_switch.f.button_state.r_data)
+        m.submodules += FFSynchronizer(self.button_off_raw, self._button_switch.f.button_off_state.r_data)
 
 
         # forward register values
@@ -93,6 +96,7 @@ class Top(Component):
     button_raw: In(1)
     switches_raw: In(4)
     status_leds: Out(8)
+    button_off_raw: In(1)
 
     audio_ram: Out(AudioRAMBus())
     csr_bus: In(csr.Signature(addr_width=8, data_width=32))
@@ -133,6 +137,7 @@ class Top(Component):
         m.d.comb += [
             system_regs.switches_raw.eq(self.switches_raw),
             system_regs.button_raw.eq(self.button_raw),
+            system_regs.button_off_raw.eq(self.button_off_raw),
             self.status_leds.eq(system_regs.leds)
         ]
 

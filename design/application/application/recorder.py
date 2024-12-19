@@ -6,6 +6,7 @@ import wave
 import argparse
 import numpy as np
 from pathlib import Path
+import os
 
 from .hw import HW
 
@@ -20,9 +21,9 @@ def recorder():
     hw.set_store_raw_data(True)
     channels = 12
     button_hold_amount = 8
+    button_fpga_off_hold_amount = 8
     IDLE = True
     RECORD = True
-    file_index = 0
     chunk_num = 0
     basepath = '/home/nixos'
     hw.LED_off()
@@ -40,6 +41,7 @@ def recorder():
         print('idle...')
         # Initiate LED Idle Sequence
         button_counter = 0
+        button_off_counter = 0
         while IDLE:
             hw.LED_idle()
             # Check Button State / Wait for Press
@@ -51,6 +53,14 @@ def recorder():
                     IDLE = False
             else:
                 button_counter = 0
+                if hw.get_off_button_state():
+                    button_off_counter += 1
+                    if button_off_counter == button_fpga_off_hold_amount:
+                        hw.LED_quick_blink()
+                        # run shutdown code
+                else:
+                    button_off_counter = 0
+
 
             time.sleep(0.1)
 
@@ -170,6 +180,7 @@ def recorder():
         IDLE = True
         RECORD = True
         hw.LED_off()
+        os.sync()
         time.sleep(1)
 
 

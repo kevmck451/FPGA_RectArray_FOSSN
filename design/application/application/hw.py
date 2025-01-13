@@ -120,12 +120,7 @@ class HW:
 
     def get_off_button_state(self):
         p1 = self.r[11]
-        button_value = p1 & 0x1
-
-        if button_value == 1: button_state = True
-        else: button_state = False
-
-        return button_state
+        return bool(p1 & (1 << 13))
 
     def get_gain(self):
         p1 = self.r[11]

@@ -29,8 +29,6 @@ def recorder():
     hw.LED_off()
     error_occured = False
 
-    # create directory for error logs
-    # Path(f'{basepath}/logs').mkdir(exist_ok=True)
 
     # Recorder Script
     print('Recorder Script is Running')
@@ -58,6 +56,10 @@ def recorder():
                     if button_off_counter == button_fpga_off_hold_amount:
                         hw.LED_quick_blink()
                         # run shutdown code
+                        import subprocess
+                        subprocess.run(["poweroff"], check=True)
+                        while True: # don't let user do anything silly
+                            time.sleep(1)
                 else:
                     button_off_counter = 0
 

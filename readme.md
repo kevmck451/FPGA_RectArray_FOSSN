@@ -324,7 +324,7 @@ scp nixos@192.168.80.1:/home/nixos/0_0.wav .
 
 - if using MacBook to control headless Intel Linux PC then ssh into intel linux pc
 ```zsh
-ssh kevmck@141.225.167.215
+ssh kevmck@141.225.167.151
 ```
 - from here you can either do this from the intel linux comp or ssh'd from macbook
 - cd into FPGA folder with nix flake file

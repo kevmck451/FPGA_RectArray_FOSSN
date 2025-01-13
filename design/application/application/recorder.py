@@ -21,7 +21,7 @@ def recorder():
     hw.set_store_raw_data(True)
     channels = 12
     button_hold_amount = 8
-    button_fpga_off_hold_amount = 8
+    button_fpga_off_hold_amount = 32
     IDLE = True
     RECORD = True
     chunk_num = 0

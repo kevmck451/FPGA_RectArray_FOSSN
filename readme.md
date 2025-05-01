@@ -36,6 +36,15 @@ zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress co
 ssh nixos@192.168.80.2 -J kevmck@141.225.162.254    
 ```
 
+
+
+#### Using the Device
+```zsh
+ssh nixos@192.168.80.2
+record
+```
+
+
 ---
 # Full Instructions
 **<u>First Time Setup Instructions</u>**

@@ -24,5 +24,6 @@ buildPythonApplication {
     "application.wavdump"
     "application.recorder"
     "application.server"
+    "application.record"
   ];
 }

@@ -12,7 +12,6 @@ import sys
 import subprocess
 
 
-
 from .hw import HW
 
 
@@ -24,6 +23,7 @@ def parse_args():
 
 def input_watcher():
     global RECORD
+    print('PRESS s AND HIT ENTER TO STOP RECORDING')
     for line in sys.stdin:
         if line.strip().lower() == 's':
             print("---- Received stop command from user input.")

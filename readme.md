@@ -33,7 +33,7 @@ zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress co
 #### 3.4: SSH Connection with MacBook
 - SSH into FPGA from MacBook with jumping
 ```zsh
-ssh nixos@192.168.80.1 -J kevmck@141.225.162.254    
+ssh nixos@192.168.80.2 -J kevmck@141.225.162.254    
 ```
 
 ---
@@ -286,7 +286,7 @@ minicom -D /dev/ttyUSB0 -b 115200
 - connection to the internet is required
 - SSH into FPGA
 ```zsh
-ssh nixos@192.168.80.1
+ssh nixos@192.168.80.2
 ```
 - save the address to your computer (optional)
 ```zsh
@@ -317,7 +317,7 @@ ssh kevmck@141.225.162.254
 ```
 - SSH into FPGA from MacBook with jumping
 ```zsh
-ssh nixos@192.168.80.1 -J kevmck@141.225.162.254    
+ssh nixos@192.168.80.2 -J kevmck@141.225.162.254    
 ```
 
 ---
@@ -332,13 +332,13 @@ sudo wavdump -f -r fake_mic_test.wav
 
 - copy the file to macbook for inspection with Audacity
 ```zsh
-scp -J kevmck@141.225.162.254 nixos@192.168.80.1:/home/nixos/fake_mic_test.wav .
+scp -J kevmck@141.225.162.254 nixos@192.168.80.2:/home/nixos/fake_mic_test.wav .
 ```
 ```zsh
-scp nixos@192.168.80.1:/home/nixos/0_0.wav .
+scp nixos@192.168.80.2:/home/nixos/0_0.wav .
 ```
 ```zsh
-scp nixos@192.168.80.1:"/home/nixos/*.*" .
+scp nixos@192.168.80.2:"/home/nixos/*.*" .
 ```
 - from here, changes made to code will need to be rebuilt
 
@@ -385,7 +385,7 @@ nix develop --profile profiles/dev
   - not using the dash, signifies using a nix.flake file
 
 ```zsh
-nixos-rebuild --target-host nixos@192.168.80.1 --fast --use-remote-sudo --flake .#de10-nano switch -L 
+nixos-rebuild --target-host nixos@192.168.80.2 --fast --use-remote-sudo --flake .#de10-nano switch -L 
 ```
 
 - command to check on scripts running in systemd

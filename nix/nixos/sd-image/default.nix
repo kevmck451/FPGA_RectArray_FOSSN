@@ -167,7 +167,7 @@
 
   # hardcode USB ethernet gadget address for easy access
   networking.interfaces.usb0.ipv4.addresses = [ {
-    address = "192.168.80.1";
+    address = "192.168.80.2";
     prefixLength = 24;
   } ];
 

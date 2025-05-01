@@ -1,5 +1,43 @@
 # <u>Setup and Maintenance for the DE10-Nano</u>
 
+
+## Quick Guide
+
+#### Build Image
+```zsh
+git clone https://github.com/kevmck451/FPGA_LineArray_FOSSN.git
+cd FPGA_LineArray_FOSSN
+nix build .#nixosConfigurations.de10-nano -L
+```
+
+#### SD Card Image
+
+- mount point of the SD card, but the device name
+```zsh
+lsblk 
+```
+- the name that corresponds with the mount point / SD card name
+- mine is 'sdb'
+- unmount the SD card (if it's mounted)
+- it wont hurt to do this if you're not sure
+```zsh
+sudo umount /dev/sdb
+```
+- decompress and Write Image
+
+```zsh
+zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress conv=fsync
+```
+- if you eject the sd card when it's done and reinsert it, it should say NixOS as the sd card name
+
+#### 3.4: SSH Connection with MacBook
+- SSH into FPGA from MacBook with jumping
+```zsh
+ssh nixos@192.168.80.1 -J kevmck@141.225.162.254    
+```
+
+
+# Full Instructions
 **<u>First Time Setup Instructions</u>**
 1. Programming Environment Setup
 2. Building SD Card Image

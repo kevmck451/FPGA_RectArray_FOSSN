@@ -12,14 +12,14 @@ from .hw import HW
 
 def parse_args():
     parser = argparse.ArgumentParser(prog="recorder",
-        description="run recorder program for MUAS mic line array")
+        description="run recorder program for FOSSN mic line array")
 
 def recorder():
 
     hw = HW()
     hw.set_use_fake_mics(False)
     hw.set_store_raw_data(True)
-    channels = 12
+    channels = 16
     button_hold_amount = 8
     button_fpga_off_hold_amount = 48
     IDLE = True
@@ -28,6 +28,7 @@ def recorder():
     basepath = '/home/nixos'
     hw.LED_off()
     error_occured = False
+    hw.set_gain(255)
 
 
     # Recorder Script
@@ -71,10 +72,6 @@ def recorder():
         print('recording setup initiated...')
         hw.LED_quick_blink()
         time.sleep(1)
-
-        # Get gain value from switches
-        print(f'---- Gain Value: {hw.get_gain()}')
-        hw.set_gain(hw.get_gain())
 
         # ---------------------------------------------------
         # Filename Logic

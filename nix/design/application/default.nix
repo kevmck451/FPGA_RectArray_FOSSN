@@ -23,5 +23,6 @@ buildPythonApplication {
     "application.console"
     "application.wavdump"
     "application.recorder"
+    "application.server"
   ];
 }

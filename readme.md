@@ -36,7 +36,7 @@ zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress co
 ssh nixos@192.168.80.1 -J kevmck@141.225.162.254    
 ```
 
-
+---
 # Full Instructions
 **<u>First Time Setup Instructions</u>**
 1. Programming Environment Setup
@@ -50,7 +50,7 @@ ssh nixos@192.168.80.1 -J kevmck@141.225.162.254
 
 
 ---
-# <u>First Time Setup Instructions</u>
+## <u>First Time Setup Instructions</u>
 - Building the necessary files for operating the DE10 Nano must be done with:
   - a pc with an intel processor running linux
   - Ubuntu is recommended, but other variants like lubuntu can work

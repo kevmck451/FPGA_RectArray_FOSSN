@@ -2,7 +2,7 @@ import sys
 import time
 import socket
 import argparse
-
+import subprocess
 import numpy as np
 
 from .hw import HW
@@ -114,5 +114,22 @@ def server():
     except KeyboardInterrupt:
         print("bye")
 
+
+
+
+
+def main_wrapper():
+    # stop it
+    # Turn off recorder script temporarily while recording, when done turn it back on
+    print("---- Stopping systemd mic recorder service")
+    subprocess.run(["systemctl", "stop", "start-mic-recorder.service"])
+    try:
+        server()
+    finally:
+        print("---- Restarting systemd mic recorder service")
+        subprocess.run(["systemctl", "start", "start-mic-recorder.service"])
+        # start it
+
+
 if __name__ == "__main__":
-    server()
+    main_wrapper()

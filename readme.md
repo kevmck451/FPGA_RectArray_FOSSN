@@ -43,7 +43,7 @@ ssh nixos@192.168.80.2 -J kevmck@141.225.162.254
 ssh nixos@192.168.80.2
 record
 ```
-
+- if you want to be able to exit out of terminal, start tmux session before record
 
 ---
 # Full Instructions

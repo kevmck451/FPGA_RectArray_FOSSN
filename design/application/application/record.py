@@ -44,9 +44,7 @@ def record():
     error_occured = False
     hw.set_gain(255)
 
-    # Turn off recorder script temporarily while recording, when done turn it back on
-    print("---- Stopping systemd mic recorder service")
-    subprocess.run(["systemctl", "stop", "start-mic-recorder.service"])
+
 
     # start stop watching thread
     threading.Thread(target=input_watcher, daemon=True).start()
@@ -163,10 +161,21 @@ def record():
     time.sleep(1)
 
     # turn systemd recorder back on
-    print("---- Restarting systemd mic recorder service")
-    subprocess.run(["systemctl", "start", "start-mic-recorder.service"])
+
+
+def main_wrapper():
+    # stop it
+    # Turn off recorder script temporarily while recording, when done turn it back on
+    print("---- Stopping systemd mic recorder service")
+    subprocess.run(["systemctl", "stop", "start-mic-recorder.service"])
+    try:
+        record()
+    finally:
+        print("---- Restarting systemd mic recorder service")
+        subprocess.run(["systemctl", "start", "start-mic-recorder.service"])
+        # start it
 
 
 if __name__ == "__main__":
-    record()
+    main_wrapper()
 

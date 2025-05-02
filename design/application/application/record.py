@@ -44,8 +44,6 @@ def record():
     error_occured = False
     hw.set_gain(255)
 
-
-
     # start stop watching thread
     threading.Thread(target=input_watcher, daemon=True).start()
 
@@ -159,8 +157,6 @@ def record():
     hw.LED_off()
     os.sync()
     time.sleep(1)
-
-    # turn systemd recorder back on
 
 
 def main_wrapper():

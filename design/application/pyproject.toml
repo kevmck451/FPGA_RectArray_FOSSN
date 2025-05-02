@@ -9,5 +9,6 @@ version = "0.0.1"
 [project.scripts]
 wavdump = "application.wavdump:wavdump"
 console = "application.console:console"
-server = "application.server:server"
+server = "application.server:main_wrapper"
 recorder = "application.recorder:recorder"
+record = "application.record:main_wrapper"

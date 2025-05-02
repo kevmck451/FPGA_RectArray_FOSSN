@@ -30,12 +30,26 @@ zstdcat result/sd-image/*.img.zst | sudo dd of=/dev/sdb bs=4M status=progress co
 ```
 - if you eject the sd card when it's done and reinsert it, it should say NixOS as the sd card name
 
+
+#### 3.1: Starting up the DE10
+- put the SD card in the DE10
+- set de10 mel switches to all 0 (up)
+- plug the power cable to the DE10
+
+
 #### 3.4: SSH Connection with MacBook
 - SSH into FPGA from MacBook with jumping
 ```zsh
 ssh nixos@192.168.80.2 -J kevmck@141.225.162.254    
 ```
 
+## <u>3. Rebuilding Software Changes</u>
+```zsh
+cd Desktop/FPGA_LineArray_FOSSN
+git pull
+nix develop --profile profiles/dev
+nixos-rebuild --target-host nixos@192.168.80.2 --fast --use-remote-sudo --flake .#de10-nano switch -L 
+```
 
 
 #### Using the Device

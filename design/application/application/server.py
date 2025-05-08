@@ -69,67 +69,58 @@ def parse_args():
 
     return parser.parse_args()
 
-def serve(hw, channels, port, limit_samples):
+def serve():
+    args = parse_args()
     host = get_ip()
-    print(f"listening at IP {host} port {port}")
+    print(f"listening at IP {host} port {args.port}")
 
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind(("0.0.0.0", port))
+    server_socket.bind(("0.0.0.0", args.port))
     server_socket.listen(1)
 
     try:
         while True:
             (client_socket, address) = server_socket.accept()
+
+            # Turn off recorder script temporarily while recording, when done turn it back on
+            print("---- Stopping systemd mic recorder service")
+            subprocess.run(["systemctl", "stop", "start-mic-recorder.service"])
+
+            hw = HW()
+            capture_frequency = hw.mic_freq_hz
+            print(f"capture frequency is {capture_frequency}Hz")
+
+            hw.set_gain(args.gain)
+            hw.set_use_fake_mics(args.fake)
+            hw.set_store_raw_data(args.raw)
+
+            channels = args.channels
+            max_channels = hw.num_mics if args.raw else hw.num_chans
+            if channels is None:
+                channels = max_channels
+            if channels < 1 or channels > max_channels:
+                raise ValueError(f"must be 1 <= channels <= {max_channels}")
+
             try:
-                capture(hw, client_socket, channels, limit_samples)
+                capture(hw, client_socket, channels, int(capture_frequency * args.limit))
                 print("client said goodbye")
             except (ConnectionResetError, ConnectionAbortedError,
                     BrokenPipeError):
                 print("client left rudely")
             finally:
                 client_socket.close()
+                print("---- Restarting systemd mic recorder service")
+                subprocess.run(["systemctl", "start", "start-mic-recorder.service"])
     finally:
         server_socket.close()
 
 def server():
-    args = parse_args()
-
-    hw = HW()
-    capture_frequency = hw.mic_freq_hz
-    print(f"capture frequency is {capture_frequency}Hz")
-
-    hw.set_gain(args.gain)
-    hw.set_use_fake_mics(args.fake)
-    hw.set_store_raw_data(args.raw)
-
-    channels = args.channels
-    max_channels = hw.num_mics if args.raw else hw.num_chans
-    if channels is None:
-        channels = max_channels
-    if channels < 1 or channels > max_channels:
-        raise ValueError(f"must be 1 <= channels <= {max_channels}")
-
     try:
-        serve(hw, channels, args.port, int(capture_frequency * args.limit))
+        serve()
     except KeyboardInterrupt:
         print("bye")
 
 
 
-
-
-def main_wrapper():
-    # stop it
-    # Turn off recorder script temporarily while recording, when done turn it back on
-    print("---- Stopping systemd mic recorder service")
-    subprocess.run(["systemctl", "stop", "start-mic-recorder.service"])
-    try:
-        server()
-    finally:
-        print("---- Restarting systemd mic recorder service")
-        subprocess.run(["systemctl", "start", "start-mic-recorder.service"])
-        # start it
-
-
 if __name__ == "__main__":
-    main_wrapper()
+    server()

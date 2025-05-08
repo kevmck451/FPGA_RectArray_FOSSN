@@ -19,6 +19,9 @@ def recorder():
     hw = HW()
     hw.set_use_fake_mics(False)
     hw.set_store_raw_data(True)
+    hw.LED_off()
+    hw.set_gain(255)
+
     channels = 16
     button_hold_amount = 8
     button_fpga_off_hold_amount = 48
@@ -26,9 +29,7 @@ def recorder():
     RECORD = True
     chunk_num = 0
     basepath = '/home/nixos'
-    hw.LED_off()
     error_occured = False
-    hw.set_gain(255)
 
 
     # Recorder Script

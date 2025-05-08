@@ -55,9 +55,15 @@ nixos-rebuild --target-host nixos@192.168.80.2 --fast --use-remote-sudo --flake 
 #### Using the Device
 ```zsh
 ssh nixos@192.168.80.2
-record
+sudo record
 ```
 - if you want to be able to exit out of terminal, start tmux session before record
+
+```zsh
+scp nixos@192.168.80.2:"/home/nixos/*.*" .
+rm -f *.*
+```
+
 
 ---
 # Full Instructions

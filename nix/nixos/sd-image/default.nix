@@ -179,7 +179,7 @@
     prefixLength = 24;
   } ];
 
-  networking.dhcpcd.denyInterfaces = [ "usb0" ];
+  networking.dhcpcd.denyInterfaces = [ "usb0" "eth0"];
 
 
   # save space and compilation time. might revise?

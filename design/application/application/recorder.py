@@ -22,7 +22,7 @@ def recorder():
     hw.LED_off()
     hw.set_gain(255)
 
-    channels = 16
+    channels = 48
     button_hold_amount = 8
     button_fpga_off_hold_amount = 48
     IDLE = True

@@ -36,7 +36,7 @@ def record():
     hw = HW()
     hw.set_use_fake_mics(False)
     hw.set_store_raw_data(True)
-    channels = 16
+    channels = 48
     button_hold_amount = 8
     chunk_num = 0
     basepath = '/home/nixos'

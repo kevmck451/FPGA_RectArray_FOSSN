@@ -154,6 +154,14 @@
    # uncomplicate using the server
   networking.firewall.enable = false;
 
+  # ethernet interface used with other devices so static ip with no DHCP
+  networking.interfaces.eth0.ipv4.addresses = [{
+    address = "192.168.0.2";
+    prefixLength = 24;
+  }];
+
+  networking.defaultGateway = "192.168.0.1";
+
   # run DHCP for access over USB ethernet gadget
   services.dnsmasq = {
     enable = true;
@@ -167,7 +175,7 @@
 
   # hardcode USB ethernet gadget address for easy access
   networking.interfaces.usb0.ipv4.addresses = [ {
-    address = "192.168.80.2";
+    address = "192.168.80.1";
     prefixLength = 24;
   } ];
 
